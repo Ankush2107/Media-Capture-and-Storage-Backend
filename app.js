@@ -11,25 +11,47 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
+const allowedOrigins = [
+  'https://media-capture-and-storage-frontend.vercel.app',
+  'http://localhost:3000'
+];
+
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    // Allow requests with no origin (mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'x-auth-token',
+    'x-requested-with'
+  ],
+  exposedHeaders: ['x-auth-token'],
   credentials: true,
   preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 204,
+  maxAge: 86400 // 24 hours
 };
 
 // Apply CORS middleware FIRST
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Explicit OPTIONS handler
 
+// Handle OPTIONS requests explicitly
+app.options('*', cors(corsOptions)); 
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', allowedOrigins.join(','));
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
