@@ -6,18 +6,30 @@ const authRoutes = require("./routes/authRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const bodyParser = require("body-parser");
 const app = express();
-
 const allowedOrigins = [
   'https://media-capture-and-storage-frontend.vercel.app',
-  'http://localhost:3000' // For local testing
+  'http://localhost:3000'
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
-  credentials: true
-}));
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS middleware FIRST
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Explicit OPTIONS handler
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
