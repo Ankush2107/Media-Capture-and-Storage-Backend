@@ -9,7 +9,7 @@ const app = express();
 
 
 const allowedOrigins = [
-  'https://media-capture-and-storage-frontend.vercel.app',
+  'https://mediacaptureandstorage.netlify.app',
   'http://localhost:3000'
 ];
 
