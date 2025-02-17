@@ -9,8 +9,7 @@ const app = express();
 
 
 const allowedOrigins = [
-  'https://mediacaptureandstorage.netlify.app',
-  'http://localhost:3000'
+  'https://mediacaptureandstorage.netlify.app'
 ];
 
 const corsOptions = {
