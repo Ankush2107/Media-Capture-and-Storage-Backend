@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const app = express();
 
 const allowedOrigins = [
