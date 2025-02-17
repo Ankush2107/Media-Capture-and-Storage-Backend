@@ -6,10 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const bodyParser = require("body-parser");
 const app = express();
-const allowedOrigins = [
-  'https://media-capture-and-storage-frontend.vercel.app',
-  'http://localhost:3000'
-];
+
 
 const allowedOrigins = [
   'https://media-capture-and-storage-frontend.vercel.app',
@@ -18,10 +15,7 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
