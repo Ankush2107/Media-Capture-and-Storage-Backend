@@ -5,9 +5,21 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  'https://media-capture-and-storage-frontend.vercel.app',
+  'http://localhost:3000' // For local testing
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
